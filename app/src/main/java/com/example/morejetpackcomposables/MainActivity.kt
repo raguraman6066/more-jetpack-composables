@@ -5,7 +5,9 @@ import android.widget.CheckBox
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material.*
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,11 +16,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -27,6 +39,7 @@ import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,10 +70,34 @@ class MainActivity : ComponentActivity() {
                   //  SwitchDemo()
                   //  CheckBoxDemo()
                   //  CircularProgressDemo()
-                    MyBasicUI()
+                   // SmallTopAppBarExample()
+//                    DemoCard()
+                    DemoFloating()
                 }
             }
         }
+    }
+}
+
+
+@Composable
+fun DemoBottomNav(){
+    NavigationBar {
+
+    }
+}
+@Composable
+fun DemoFloating(){
+    val context= LocalContext.current.applicationContext
+    Box(modifier = Modifier.fillMaxSize()) {
+        FloatingActionButton(onClick = {
+            Toast.makeText(context,"you clicked the fab",Toast.LENGTH_SHORT).show()
+        }, modifier = Modifier
+            .padding(16.dp)
+            .align(alignment = Alignment.BottomEnd)) {
+            Icon(imageVector = Icons.Filled.Add, contentDescription = "Add note")
+        }
+
     }
 }
 
@@ -80,9 +117,10 @@ fun GreetingPreview() {
     }
 }
 
+
 @Composable
 fun RadioButtonDemo(){
-    val ctx= LocalContext.current
+   // val ctx= LocalContext.current
     val radioOptions= listOf<String>("Pizza","Meat","Fish")
     var (selectedItem,onOptionSelected) = remember {
         mutableStateOf(radioOptions[0])
@@ -100,8 +138,10 @@ fun RadioButtonDemo(){
              role = Role.RadioButton
          )
          .padding(horizontal = 16.dp)) {
-      RadioButton(modifier = Modifier.padding(end = 16.dp), onClick = {(onOptionSelected(label))}, selected = (selectedItem==label))
-         Text(text = label)
+          RadioButton(modifier = Modifier.padding(end = 16.dp),
+                      onClick = {(onOptionSelected(label))},
+              selected = (selectedItem==label))
+          Text(text = label)
          }
        }
     }
@@ -142,8 +182,46 @@ fun CircularProgressDemo(){
     }
 }
 
+//scaffold -core layout predefined layout provides basic structure like appbar and floating button, drawer,snackbar
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SmallTopAppBarExample() {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
+                title = {
+                    Text("Small Top App Bar")
+                },
+                navigationIcon = { IconButton(onClick = {}) {
+                    Icon(imageVector = Icons.Filled.Menu, contentDescription ="Navigation Menu" )
+                    
+                }},
+                actions = {},
+                
+            )
+
+        },
+    ) { innerPadding ->
+        ScrollContent(innerPadding)
+    }
+}
 
 @Composable
-fun MyBasicUI(){
+fun <PaddingValues> ScrollContent(innerPadding: PaddingValues) {
 
+}
+
+@Composable
+fun DemoCard(){
+    Column {
+        Card(elevation = CardDefaults.cardElevation(20.dp), colors = CardDefaults.cardColors(Color.Red)) {
+            Text(text = "Hello cards!")
+        }
+    }
 }
